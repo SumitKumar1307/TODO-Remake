@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "707661668810",
+    "project_id": "todo-remake-3364c",
+    "storage_bucket": "todo-remake-3364c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:707661668810:android:9a63dcc48009c549adaf33",
+        "android_client_info": {
+          "package_name": "com.example.todo_remake"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "707661668810-vjgo5c6e4e4461otvk78tivtv2dr1kkk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBTLsU8Xzc2p3qqr6Z6gezNWYxDFCxy2g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "707661668810-vjgo5c6e4e4461otvk78tivtv2dr1kkk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
