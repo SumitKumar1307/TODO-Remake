@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Registration extends StatefulWidget {
   const Registration({Key? key}) : super(key: key);
@@ -76,7 +77,7 @@ class _RegistrationState extends State<Registration> {
                         ),
                       ),
                       Icon(
-                        Icons.email_outlined,
+                        FontAwesomeIcons.microsoft,
                         color: Colors.black,
                       )
                     ],
@@ -103,7 +104,7 @@ class _RegistrationState extends State<Registration> {
                         ),
                       ),
                       Icon(
-                        Icons.email_outlined,
+                        FontAwesomeIcons.google,
                         color: Colors.black,
                       )
                     ],
