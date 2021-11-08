@@ -13,11 +13,41 @@ class Registration extends StatefulWidget {
 class _RegistrationState extends State<Registration> {
   @override
   Widget build(BuildContext context) {
+    List signInOptions = [
+      {
+        "title": "Sign In With Email",
+        "icon": Icon(Icons.email_outlined, color: Colors.black)
+      },
+      {
+        "title": "Sign In With Microsoft",
+        "icon": Icon(FontAwesomeIcons.microsoft, color: Colors.black)
+      },
+      {
+        "title": "Sign In With Google",
+        "icon": Icon(FontAwesomeIcons.google, color: Colors.black)
+      }
+    ];
+
+    List registerOptions = [
+      {
+        "title": "Register With Email",
+        "icon": Icon(Icons.email_outlined, color: Colors.black)
+      },
+      {
+        "title": "Register With Microsoft",
+        "icon": Icon(FontAwesomeIcons.microsoft, color: Colors.black)
+      },
+      {
+        "title": "Register With Google",
+        "icon": Icon(FontAwesomeIcons.google, color: Colors.black)
+      }
+    ];
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            margin: EdgeInsets.only(top: 130),
+            margin: EdgeInsets.only(top: 100),
             width: MediaQuery.of(context).size.width,
             alignment: Alignment.center,
             child: Column(
@@ -29,87 +59,32 @@ class _RegistrationState extends State<Registration> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 40),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  height: 70,
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.only(left: 10, right: 20),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(19)),
-                  color: Color(0xffF4F9FC),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text(
-                        "Sign In With Email",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                SizedBox(height: 30),
+                for (var i = 0; i < signInOptions.length; i++)
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    height: 70,
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.only(left: 10, right: 20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(19)),
+                      color: Color(0xffF4F9FC),
+                    ),
+                    margin: EdgeInsets.only(top: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          signInOptions[i]['title'],
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      Icon(
-                        Icons.email_outlined,
-                        color: Colors.black,
-                      )
-                    ],
+                        signInOptions[i]["icon"]
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(height: 10),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  height: 70,
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.only(left: 10, right: 20),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(19)),
-                  color: Color(0xffF4F9FC),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text(
-                        "Sign In With Microsoft",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Icon(
-                        FontAwesomeIcons.microsoft,
-                        color: Colors.black,
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(height: 10),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  height: 70,
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.only(left: 10, right: 20),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(19)),
-                  color: Color(0xffF4F9FC),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text(
-                        "Sign In With Google",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Icon(
-                        FontAwesomeIcons.google,
-                        color: Colors.black,
-                      )
-                    ],
-                  ),
-                ),
                 SizedBox(height: 45),
                 Text(
                   "Register In",
@@ -118,88 +93,34 @@ class _RegistrationState extends State<Registration> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 40),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  height: 70,
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.only(left: 10, right: 20),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(19)),
-                  color: Color(0xffF4F9FC),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text(
-                        "Register With Email",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                SizedBox(height: 30),
+                for (var i = 0; i < registerOptions.length; i++)
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    height: 70,
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.only(left: 10, right: 20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(19)),
+                      color: Color(0xffF4F9FC),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          registerOptions[i]["title"],
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      Icon(
-                        Icons.email_outlined,
-                        color: Colors.black,
-                      )
-                    ],
+                        registerOptions[i]["icon"]
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(height: 10),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  height: 70,
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.only(left: 10, right: 20),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(19)),
-                  color: Color(0xffF4F9FC),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text(
-                        "Register With Microsoft",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Icon(
-                        FontAwesomeIcons.microsoft,
-                        color: Colors.black,
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(height: 10),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  height: 70,
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.only(left: 10, right: 20),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(19)),
-                  color: Color(0xffF4F9FC),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text(
-                        "Register With Google",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Icon(
-                        FontAwesomeIcons.google,
-                        color: Colors.black,
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(height: 75,)
+                SizedBox(
+                  height: 75,
+                )
               ],
             ),
           ),
