@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -71,18 +72,32 @@ class _RegistrationState extends State<Registration> {
                       color: Color(0xffF4F9FC),
                     ),
                     margin: EdgeInsets.only(top: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          signInOptions[i]['title'],
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                    child: MaterialButton(
+                      onPressed: () => {
+                        if (signInOptions[i]["title"] ==
+                            "Sign In With Email")
+                          {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Form(registerOrSignIn: 1),
+                              ),
+                            )
+                          }
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            signInOptions[i]['title'],
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        signInOptions[i]["icon"]
-                      ],
+                          signInOptions[i]["icon"]
+                        ],
+                      ),
                     ),
                   ),
                 SizedBox(height: 45),
@@ -104,23 +119,133 @@ class _RegistrationState extends State<Registration> {
                       borderRadius: BorderRadius.all(Radius.circular(19)),
                       color: Color(0xffF4F9FC),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          registerOptions[i]["title"],
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                    margin: EdgeInsets.only(top: 10),
+                    child: MaterialButton(
+                      onPressed: () => {
+                        if (registerOptions[i]["title"] ==
+                            "Register With Email")
+                          {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Form(registerOrSignIn: 0),
+                              ),
+                            )
+                          }
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            registerOptions[i]["title"],
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        registerOptions[i]["icon"]
-                      ],
+                          registerOptions[i]["icon"]
+                        ],
+                      ),
                     ),
                   ),
                 SizedBox(
                   height: 75,
                 )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class Form extends StatefulWidget {
+  final int? registerOrSignIn; // 0 if register, else 1
+  const Form({Key? key, @required this.registerOrSignIn}) : super(key: key);
+
+  @override
+  _FormState createState() => _FormState();
+}
+
+class _FormState extends State<Form> {
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Container(
+            margin: EdgeInsets.only(top: 150),
+            width: MediaQuery.of(context).size.width,
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                Text(
+                  widget.registerOrSignIn == 0 ? "Register" : "Sign In",
+                  style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 50),
+                Container(
+                  padding:
+                      EdgeInsets.only(top: 20, bottom: 20, left: 25, right: 25),
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    color: Color(0xffF4F9FC),
+                  ),
+                  child: CupertinoTextField(
+                    decoration: BoxDecoration(color: Colors.transparent),
+                    controller: email,
+                    placeholder: "example@email.com",
+                    prefix: Container(
+                      margin: EdgeInsets.only(right: 15),
+                      child: Icon(Icons.email_outlined, color: Colors.black),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                Container(
+                  padding:
+                      EdgeInsets.only(top: 20, bottom: 20, left: 25, right: 25),
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    color: Color(0xffF4F9FC),
+                  ),
+                  child: CupertinoTextField(
+                    decoration: BoxDecoration(color: Colors.transparent),
+                    controller: password,
+                    placeholder: "password",
+                    prefix: Container(
+                      margin: EdgeInsets.only(right: 15),
+                      child: Icon(Icons.lock_outline, color: Colors.black),
+                    ),
+                    obscureText: true,
+                  ),
+                ),
+                SizedBox(height: 50),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xffCFEDFF),
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  child: CupertinoButton(
+                    padding: EdgeInsets.only(
+                        top: 15, bottom: 15, left: 90, right: 90),
+                    child: Text(
+                      widget.registerOrSignIn == 0 ? "Register" : "Sign In",
+                      style: TextStyle(
+                        fontSize: 30,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    onPressed: () => {},
+                  ),
+                ),
               ],
             ),
           ),
