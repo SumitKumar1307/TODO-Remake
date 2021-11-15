@@ -1,7 +1,11 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, non_constant_identifier_names
 
+import 'dart:ui';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Registration extends StatefulWidget {
@@ -74,8 +78,7 @@ class _RegistrationState extends State<Registration> {
                     margin: EdgeInsets.only(top: 10),
                     child: MaterialButton(
                       onPressed: () => {
-                        if (signInOptions[i]["title"] ==
-                            "Sign In With Email")
+                        if (signInOptions[i]["title"] == "Sign In With Email")
                           {
                             Navigator.push(
                               context,
@@ -172,6 +175,9 @@ class _FormState extends State<Form> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
 
+  String email_error = "";
+  String pass_error = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -188,6 +194,19 @@ class _FormState extends State<Form> {
                   style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 50),
+                if (email_error != "")
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.75,
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      email_error,
+                      style: TextStyle(
+                        color: Colors.redAccent,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                 Container(
                   padding:
                       EdgeInsets.only(top: 20, bottom: 20, left: 25, right: 25),
@@ -243,7 +262,58 @@ class _FormState extends State<Form> {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    onPressed: () => {},
+                    onPressed: () async {
+                      if (widget.registerOrSignIn == 0) {
+                        print("hi");
+                        FirebaseAuth auth = FirebaseAuth.instance;
+                        try {
+                          await auth.createUserWithEmailAndPassword(
+                              email: email.text, password: password.text);
+                          setState(() {
+                            email_error = "";
+                          });
+                        } on FirebaseAuthException catch (e) {
+                          print(e.code);
+                          String message = "";
+                          if (e.code == "email-already-in-use") {
+                            message = "Email is already in use!";
+                          } else if (e.code == "invalid-email") {
+                            message = "Please provide a valid email!";
+                          } else if (e.code == "weak-password") {
+                            message = "Please choose a stronger password!";
+                          }
+
+                          setState(() {
+                            email_error = message;
+                          });
+                        }
+                      } else {
+                        FirebaseAuth auth = FirebaseAuth.instance;
+                        try {
+                          await auth.signInWithEmailAndPassword(
+                              email: email.text, password: password.text);
+                          setState(() {
+                            email_error = "";
+                          });
+                        } on FirebaseAuthException catch (e) {
+                          print(e.code);
+                          String message = "";
+                          if (e.code == "user-disabled") {
+                            message = "User account is disabled!";
+                          } else if (e.code == "invalid-email") {
+                            message = "Please provide a valid email!";
+                          } else if (e.code == "user-not-found") {
+                            message = "User not found!";
+                          } else if (e.code == "wrong-password") {
+                            message = "Wrong Password!";
+                          }
+
+                          setState(() {
+                            email_error = message;
+                          });
+                        }
+                      }
+                    },
                   ),
                 ),
               ],
