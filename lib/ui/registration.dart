@@ -2,11 +2,13 @@
 
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:todo_remake/methods.dart';
+import 'package:todo_remake/ui/home.dart';
 
 class Registration extends StatefulWidget {
   const Registration({Key? key}) : super(key: key);
@@ -21,30 +23,36 @@ class _RegistrationState extends State<Registration> {
     List signInOptions = [
       {
         "title": "Sign In With Email",
-        "icon": Icon(Icons.email_outlined, color: Colors.black)
+        "icon": Icon(Icons.email_outlined, color: Colors.black),
+        "method": "email"
       },
       {
         "title": "Sign In With Microsoft",
-        "icon": Icon(FontAwesomeIcons.microsoft, color: Colors.black)
+        "icon": Icon(FontAwesomeIcons.microsoft, color: Colors.black),
+        "method": "ms"
       },
       {
         "title": "Sign In With Google",
-        "icon": Icon(FontAwesomeIcons.google, color: Colors.black)
+        "icon": Icon(FontAwesomeIcons.google, color: Colors.black),
+        "method": "google"
       }
     ];
 
     List registerOptions = [
       {
         "title": "Register With Email",
-        "icon": Icon(Icons.email_outlined, color: Colors.black)
+        "icon": Icon(Icons.email_outlined, color: Colors.black),
+        "method": "email"
       },
       {
         "title": "Register With Microsoft",
-        "icon": Icon(FontAwesomeIcons.microsoft, color: Colors.black)
+        "icon": Icon(FontAwesomeIcons.microsoft, color: Colors.black),
+        "method": "ms"
       },
       {
         "title": "Register With Google",
-        "icon": Icon(FontAwesomeIcons.google, color: Colors.black)
+        "icon": Icon(FontAwesomeIcons.google, color: Colors.black),
+        "method": "google"
       }
     ];
 
@@ -78,7 +86,7 @@ class _RegistrationState extends State<Registration> {
                     margin: EdgeInsets.only(top: 10),
                     child: MaterialButton(
                       onPressed: () => {
-                        if (signInOptions[i]["title"] == "Sign In With Email")
+                        if (signInOptions[i]["method"] == "email")
                           {
                             Navigator.push(
                               context,
@@ -125,8 +133,7 @@ class _RegistrationState extends State<Registration> {
                     margin: EdgeInsets.only(top: 10),
                     child: MaterialButton(
                       onPressed: () => {
-                        if (registerOptions[i]["title"] ==
-                            "Register With Email")
+                        if (registerOptions[i]["method"] == "email")
                           {
                             Navigator.push(
                               context,
@@ -263,55 +270,32 @@ class _FormState extends State<Form> {
                       ),
                     ),
                     onPressed: () async {
+                      // * If we need to create a new user
                       if (widget.registerOrSignIn == 0) {
-                        print("hi");
-                        FirebaseAuth auth = FirebaseAuth.instance;
-                        try {
-                          await auth.createUserWithEmailAndPassword(
-                              email: email.text, password: password.text);
-                          setState(() {
-                            email_error = "";
-                          });
-                        } on FirebaseAuthException catch (e) {
-                          print(e.code);
-                          String message = "";
-                          if (e.code == "email-already-in-use") {
-                            message = "Email is already in use!";
-                          } else if (e.code == "invalid-email") {
-                            message = "Please provide a valid email!";
-                          } else if (e.code == "weak-password") {
-                            message = "Please choose a stronger password!";
-                          }
-
-                          setState(() {
-                            email_error = message;
-                          });
+                        var result =
+                            await registerWithEmail(email.text, password.text);
+                        if (result == 0) {
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(builder: (context) => Home()),
+                              (Route<dynamic> route) => false);
                         }
-                      } else {
-                        FirebaseAuth auth = FirebaseAuth.instance;
-                        try {
-                          await auth.signInWithEmailAndPassword(
-                              email: email.text, password: password.text);
-                          setState(() {
-                            email_error = "";
-                          });
-                        } on FirebaseAuthException catch (e) {
-                          print(e.code);
-                          String message = "";
-                          if (e.code == "user-disabled") {
-                            message = "User account is disabled!";
-                          } else if (e.code == "invalid-email") {
-                            message = "Please provide a valid email!";
-                          } else if (e.code == "user-not-found") {
-                            message = "User not found!";
-                          } else if (e.code == "wrong-password") {
-                            message = "Wrong Password!";
-                          }
 
-                          setState(() {
-                            email_error = message;
-                          });
+                        setState(() {
+                          email_error = result as String;
+                        });
+                      }
+                      // * if the user already exists
+                      else {
+                        var result = await signInWithEmail(email.text, password.text);
+                        if (result == 0) {
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(builder: (context) => Home()),
+                              (Route<dynamic> route) => false);
                         }
+
+                        setState(() {
+                          email_error = result as String;
+                        });
                       }
                     },
                   ),
