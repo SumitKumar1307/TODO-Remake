@@ -1,5 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/widgets.dart';
+
+Future<bool> initializeFlutter() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp();
+  return true;
+}
 
 Future<dynamic> registerWithEmail(String email, String password) async {
   var auth = FirebaseAuth.instance;

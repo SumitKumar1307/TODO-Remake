@@ -1,9 +1,6 @@
 // ignore_for_file: prefer_const_constructors, non_constant_identifier_names
 
 import 'dart:ui';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -286,7 +283,7 @@ class _FormState extends State<Form> {
                       }
                       // * if the user already exists
                       else {
-                        var result = await signInWithEmail(email.text, password.text);
+                        var result = await registerWithEmail(email.text, password.text);
                         if (result == 0) {
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(builder: (context) => Home()),
