@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/widgets.dart';
+import 'package:uuid/uuid.dart';
+
+var uuid = const Uuid();
 
 Future<bool> initializeFlutter() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,26 +51,26 @@ Future<void> addList(String listName) async {
   final firestoreInstance = FirebaseFirestore.instance;
   firestoreInstance.collection("data").doc(currentUser!.uid).update(
     {
-      listName: {
-        "type": "LIST",
-        "items": FieldValue.arrayUnion(
-          [],
-        )
-      }
+      "LISTS": FieldValue.arrayUnion([
+        {
+          listName: {"items": FieldValue.arrayUnion([]), "id": uuid.v4()}
+        }
+      ])
     },
   );
 }
 
-Future<void> addItems(List<dynamic> items, String listName) async {
+Future<void> addListItems(List<dynamic> items, String listName) async {
+  
   User? currentUser = FirebaseAuth.instance.currentUser;
   final firestoreInstance = FirebaseFirestore.instance;
   firestoreInstance.collection("data").doc(currentUser!.uid).update(
     {
-      listName: {
-        "items": FieldValue.arrayUnion(
-          items,
-        )
-      }
+      "LISTS": FieldValue.arrayUnion([
+        {
+          listName: {"items": FieldValue.arrayUnion(items), "id": uuid.v4()}
+        }
+      ])
     },
   );
 }
@@ -78,7 +81,11 @@ Future<void> addNote(String title, String content) async {
 
   firestoreInstance.collection("data").doc(currentUser!.uid).update(
     {
-      title: {"type": "NOTE", "content": content}
+      "NOTES": FieldValue.arrayUnion([
+        {
+          title: {"content": content, "id": uuid.v4()}
+        }
+      ])
     },
   );
 }
@@ -89,7 +96,11 @@ Future<void> updateNote(String title, String updatedContent) async {
 
   firestoreInstance.collection("data").doc(currentUser!.uid).update(
     {
-      title: {"type": "NOTE", "content": updatedContent}
+      "NOTES": FieldValue.arrayUnion([
+        {
+          title: {"content": updatedContent, "id": uuid.v4()}
+        }
+      ])
     },
   );
 }

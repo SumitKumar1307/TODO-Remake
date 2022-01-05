@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_remake/methods.dart';
 // import 'package:todo_remake/ui/home.dart';
@@ -16,9 +15,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    Future<bool> flutterInitialization_successfull = initializeFlutter();
+    Future<bool> flutterInitializationSuccessfull = initializeFlutter();
     return FutureBuilder<bool>(
-        future: flutterInitialization_successfull,
+        future: flutterInitializationSuccessfull,
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           if (snapshot.hasError) {
             return Center(
