@@ -24,7 +24,10 @@ class _HomeState extends State<Home> {
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () => {},
+        onPressed: () async {
+          DataRetriever retriever = DataRetriever();
+          retriever.retrieveLists("name");
+        },
         child: Icon(Icons.add, color: Colors.black),
         backgroundColor: Color(0xffCFEDFF),
       ),
@@ -101,7 +104,7 @@ class _HomeState extends State<Home> {
 
 class ItemCard extends StatefulWidget {
   final String? title;
-  ItemCard({Key? key, required this.title}) : super(key: key);
+  const ItemCard({Key? key, required this.title}) : super(key: key);
 
   @override
   _ItemCardState createState() => _ItemCardState();

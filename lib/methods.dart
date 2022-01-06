@@ -59,7 +59,7 @@ class AppObject {
 
 class ListObject extends AppObject {
   // [{"name": "Complete Homework", "item id": "0xFFGH123", "completed": true}]
-  late Map<String, Map<String, dynamic>> items; 
+  late Map<String, Map<String, dynamic>> items;
 
   ListObject([String? title, Map<String, Map<String, dynamic>>? items]) {
     this.title = title ?? "";
@@ -78,12 +78,10 @@ class ListObject extends AppObject {
     FirebaseFirestore cloud = FirebaseFirestore.instance;
     if (currentUser != null) {
       await cloud.collection("data").doc(currentUser.uid).update({
-        "LIST": {
-          id: toMap()
-        }
+        "LIST": {id: toMap()}
       });
     }
-    
+
     isSynced = true;
   }
 
@@ -92,12 +90,10 @@ class ListObject extends AppObject {
     FirebaseFirestore cloud = FirebaseFirestore.instance;
     if (currentUser != null) {
       await cloud.collection("data").doc(currentUser.uid).set({
-        "LIST": {
-          id: toMap()
-        }
+        "LIST": {id: toMap()}
       });
     }
-    
+
     isSynced = true;
   }
 }
@@ -122,12 +118,10 @@ class NoteObject extends AppObject {
     FirebaseFirestore cloud = FirebaseFirestore.instance;
     if (currentUser != null) {
       await cloud.collection("data").doc(currentUser.uid).set({
-        "LIST": {
-          toMap()["id"]: toMap()
-        }
+        "LIST": {toMap()["id"]: toMap()}
       });
     }
-    
+
     isSynced = true;
   }
 
@@ -136,12 +130,29 @@ class NoteObject extends AppObject {
     FirebaseFirestore cloud = FirebaseFirestore.instance;
     if (currentUser != null) {
       await cloud.collection("data").doc(currentUser.uid).update({
-        "NOTES": {
-          id: toMap()
-        }
+        "NOTES": {id: toMap()}
       });
     }
-    
+
     isSynced = true;
+  }
+}
+
+class DataRetriever {
+  User? currentUser = FirebaseAuth.instance.currentUser;
+  FirebaseFirestore cloud = FirebaseFirestore.instance;
+
+  dynamic retrieveLists(String name) async {
+    if (currentUser != null) {
+      DocumentSnapshot snapshot =
+          await cloud.collection("data").doc(currentUser!.uid).get();
+      Map? data = snapshot.data() as Map?;
+      if (data != null) {
+        Map lists = data["LIST"];
+        return lists;
+      }
+    }
+
+    return 0; // there was an error
   }
 }
