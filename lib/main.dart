@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
           }
           if (snapshot.hasData) {
             return MaterialApp(
+              theme: ThemeData(fontFamily: 'Roboto'),
               debugShowCheckedModeBanner: false,
               home: Registration(),
             );

@@ -13,6 +13,15 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
+    String? greeting;
+    if (DateTime.now().hour < 12) {
+      greeting = "Good\nMorning!";
+    } else if (DateTime.now().hour < 17) {
+      greeting = "Good\nAfternoon!";
+    } else {
+      greeting = "Good\nEvening!";
+    }
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () => {},
@@ -21,50 +30,67 @@ class _HomeState extends State<Home> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.only(left: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Container(
+                padding: EdgeInsets.only(bottom: 30, left: 20),
+                alignment: Alignment.bottomLeft,
                 width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.only(right: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                height: MediaQuery.of(context).size.height * 0.3,
+                decoration: BoxDecoration(
+                  color: Color(0xffCFEDFF),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(30),
+                  ),
+                ),
+                child: Text(
+                  greeting,
+                  style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(left: 20),
+                alignment: Alignment.centerLeft,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.only(top: 40),
-                      child: Text(
-                        "Lists",
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.only(right: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(top: 40),
+                            child: Text(
+                              "Lists",
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 20),
-                      child: CircleAvatar(
-                        radius: 27.5,
-                        backgroundColor: Color(0xffCFEDFF),
+                    SizedBox(height: 20),
+                    ItemCard(title: "Shopping List"),
+                    SizedBox(height: 10),
+                    ItemCard(title: "TODO"),
+                    SizedBox(height: 35),
+                    Text(
+                      "Notes",
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
+                    SizedBox(height: 20),
+                    ItemCard(title: "Important Notes")
                   ],
                 ),
               ),
-              SizedBox(height: 20),
-              ItemCard(title: "Shopping List"),
-              SizedBox(height: 10),
-              ItemCard(title: "TODO"),
-              SizedBox(height: 35),
-              Text(
-                "Notes",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 20),
-              ItemCard(title: "Important Notes"),
             ],
           ),
         ),
@@ -95,8 +121,9 @@ class _ItemCardState extends State<ItemCard> {
       child: Text(
         "${widget.title}",
         style: TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
+          fontFamily: 'Roboto',
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );
