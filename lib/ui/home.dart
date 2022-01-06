@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:todo_remake/methods.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -17,7 +18,10 @@ class _HomeState extends State<Home> {
           child: Center(
         child: CupertinoButton(
           child: Text("Click"),
-          onPressed: () {},
+          onPressed: () async {
+            NoteObject list1 = NoteObject("Important Formulae", "e = mc squared");
+            await list1.syncNote();
+          },
         ),
       )),
     );

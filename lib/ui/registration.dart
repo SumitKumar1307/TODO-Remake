@@ -275,24 +275,25 @@ class _FormState extends State<Form> {
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(builder: (context) => Home()),
                               (Route<dynamic> route) => false);
+                        } else {
+                          setState(() {
+                            email_error = result as String;
+                          });
                         }
-
-                        setState(() {
-                          email_error = result as String;
-                        });
                       }
                       // * if the user already exists
                       else {
-                        var result = await registerWithEmail(email.text, password.text);
+                        var result =
+                            await signInWithEmail(email.text, password.text);
                         if (result == 0) {
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(builder: (context) => Home()),
                               (Route<dynamic> route) => false);
+                        } else {
+                          setState(() {
+                            email_error = result as String;
+                          });
                         }
-
-                        setState(() {
-                          email_error = result as String;
-                        });
                       }
                     },
                   ),

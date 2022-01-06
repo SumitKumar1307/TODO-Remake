@@ -46,61 +46,102 @@ Future<dynamic> signInWithEmail(String email, String password) async {
   }
 }
 
-Future<void> addList(String listName) async {
-  User? currentUser = FirebaseAuth.instance.currentUser;
-  final firestoreInstance = FirebaseFirestore.instance;
-  firestoreInstance.collection("data").doc(currentUser!.uid).update(
-    {
-      "LISTS": FieldValue.arrayUnion([
-        {
-          listName: {"items": FieldValue.arrayUnion([]), "id": uuid.v4()}
-        }
-      ])
-    },
-  );
+class AppObject {
+  String? title;
+  String? id;
+  bool isSynced = false;
+
+  void setID() {
+    var uuid = const Uuid();
+    id = uuid.v4();
+  }
 }
 
-Future<void> addListItems(List<dynamic> items, String listName) async {
-  
-  User? currentUser = FirebaseAuth.instance.currentUser;
-  final firestoreInstance = FirebaseFirestore.instance;
-  firestoreInstance.collection("data").doc(currentUser!.uid).update(
-    {
-      "LISTS": FieldValue.arrayUnion([
-        {
-          listName: {"items": FieldValue.arrayUnion(items), "id": uuid.v4()}
+class ListObject extends AppObject {
+  // [{"name": "Complete Homework", "item id": "0xFFGH123", "completed": true}]
+  late Map<String, Map<String, dynamic>> items; 
+
+  ListObject([String? title, Map<String, Map<String, dynamic>>? items]) {
+    this.title = title ?? "";
+    this.items = items ?? {};
+    setID();
+    createListInCloud();
+  }
+
+  Map<String, dynamic> toMap() => {
+        "name": title,
+        "items": items,
+      };
+
+  Future<void> syncList() async {
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    FirebaseFirestore cloud = FirebaseFirestore.instance;
+    if (currentUser != null) {
+      await cloud.collection("data").doc(currentUser.uid).update({
+        "LIST": {
+          id: toMap()
         }
-      ])
-    },
-  );
+      });
+    }
+    
+    isSynced = true;
+  }
+
+  Future<void> createListInCloud() async {
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    FirebaseFirestore cloud = FirebaseFirestore.instance;
+    if (currentUser != null) {
+      await cloud.collection("data").doc(currentUser.uid).set({
+        "LIST": {
+          id: toMap()
+        }
+      });
+    }
+    
+    isSynced = true;
+  }
 }
 
-Future<void> addNote(String title, String content) async {
-  User? currentUser = FirebaseAuth.instance.currentUser;
-  final firestoreInstance = FirebaseFirestore.instance;
+class NoteObject extends AppObject {
+  late String content;
 
-  firestoreInstance.collection("data").doc(currentUser!.uid).update(
-    {
-      "NOTES": FieldValue.arrayUnion([
-        {
-          title: {"content": content, "id": uuid.v4()}
+  NoteObject([String? title, String? content]) {
+    this.title = title ?? "";
+    this.content = content ?? "";
+    setID();
+    createNoteInCloud();
+  }
+
+  Map<String, dynamic> toMap() => {
+        "name": title,
+        "content": content,
+      };
+
+  Future<void> createNoteInCloud() async {
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    FirebaseFirestore cloud = FirebaseFirestore.instance;
+    if (currentUser != null) {
+      await cloud.collection("data").doc(currentUser.uid).set({
+        "LIST": {
+          toMap()["id"]: toMap()
         }
-      ])
-    },
-  );
-}
+      });
+    }
+    
+    isSynced = true;
+  }
 
-Future<void> updateNote(String title, String updatedContent) async {
-  User? currentUser = FirebaseAuth.instance.currentUser;
-  final firestoreInstance = FirebaseFirestore.instance;
-
-  firestoreInstance.collection("data").doc(currentUser!.uid).update(
-    {
-      "NOTES": FieldValue.arrayUnion([
-        {
-          title: {"content": updatedContent, "id": uuid.v4()}
+  Future<void> syncNote() async {
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    FirebaseFirestore cloud = FirebaseFirestore.instance;
+    if (currentUser != null) {
+      await cloud.collection("data").doc(currentUser.uid).update({
+        "NOTES": {
+          id: toMap()
         }
-      ])
-    },
-  );
+      });
+    }
+    
+    isSynced = true;
+  }
 }
