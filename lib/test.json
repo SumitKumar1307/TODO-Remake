@@ -1,0 +1,17 @@
+{
+    "LIST": {
+        "84b6b19d-0ec4-4c72-9c92-65e3de6f3ca9": {
+            "name": "TODO",
+            "items": {
+                "91948d60-0711-45ed-9d37-29d0a3b60c93": {
+                    "name": "Play Fortnite",
+                    "complete": true
+                },
+                "513efc49-185c-4d06-bcc7-89636c5d7f4b": {
+                    "name": "Complete Homework",
+                    "complete": false
+                }
+            }
+        }
+    }
+}

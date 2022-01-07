@@ -77,9 +77,12 @@ class ListObject extends AppObject {
     User? currentUser = FirebaseAuth.instance.currentUser;
     FirebaseFirestore cloud = FirebaseFirestore.instance;
     if (currentUser != null) {
-      await cloud.collection("data").doc(currentUser.uid).update({
-        "LIST": {id: toMap()}
-      });
+      await cloud
+          .collection("data")
+          .doc(currentUser.uid)
+          .collection("LISTS")
+          .doc(id)
+          .set(toMap());
     }
 
     isSynced = true;
@@ -89,9 +92,12 @@ class ListObject extends AppObject {
     User? currentUser = FirebaseAuth.instance.currentUser;
     FirebaseFirestore cloud = FirebaseFirestore.instance;
     if (currentUser != null) {
-      await cloud.collection("data").doc(currentUser.uid).set({
-        "LIST": {id: toMap()}
-      });
+      await cloud
+          .collection("data")
+          .doc(currentUser.uid)
+          .collection("LISTS")
+          .doc(id)
+          .set(toMap());
     }
 
     isSynced = true;
@@ -139,20 +145,25 @@ class NoteObject extends AppObject {
 }
 
 class DataRetriever {
-  User? currentUser = FirebaseAuth.instance.currentUser;
-  FirebaseFirestore cloud = FirebaseFirestore.instance;
-
-  dynamic retrieveLists(String name) async {
+  Future<dynamic> retrieveLists() async {
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    FirebaseFirestore cloud = FirebaseFirestore.instance;
     if (currentUser != null) {
-      DocumentSnapshot snapshot =
-          await cloud.collection("data").doc(currentUser!.uid).get();
-      Map? data = snapshot.data() as Map?;
-      if (data != null) {
-        Map lists = data["LIST"];
-        return lists;
-      }
-    }
+      final CollectionReference collection =
+          cloud.collection("data").doc(currentUser.uid).collection("LISTS");
+      List<QueryDocumentSnapshot<Object?>> data = [];
+      await collection.get().then((value) {
+        data = value.docs;
+      });
+      if (data == null) return data;
 
-    return 0; // there was an error
+      Map<String, dynamic> lists = {};
+      for (var i in data) {
+        lists[i.id] = i.data();
+      }
+
+      return lists;
+      // return data["LIST"];
+    }
   }
 }
