@@ -27,11 +27,8 @@ class _HomeState extends State<Home> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          ListObject retriever = ListObject("TODO", {
-            uuid.v4(): {"name": "Complete Homework", "complete": false},
-            uuid.v4(): {"name": "Play Fortnite", "complete": true},
-          });
-          await retriever.syncList();
+          NoteObject noteObject = NoteObject("Important Formula", "e = mc^2");
+          noteObject.syncNote();
           setState(() {});
         },
         child: Icon(Icons.add, color: Colors.black),
@@ -39,7 +36,7 @@ class _HomeState extends State<Home> {
       ),
       body: SafeArea(
         child: FutureBuilder<dynamic>(
-          future: dataRetriever.retrieveLists(),
+          future: dataRetriever.retrieveAllData(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               print(snapshot.error);
@@ -50,15 +47,18 @@ class _HomeState extends State<Home> {
             if (snapshot.hasData && snapshot.data != null) {
               dynamic data = snapshot.data;
               List lists = [];
-              if (data is Map) {
-                data.forEach((key, element) {
+              List notes = [];
+              if (data != {null}) {
+                data["LISTS"].forEach((key, element) {
                   lists.add({"name": element["name"], "id": key});
                 });
-              } else {
-                return Center(
-                    child: Text(
-                        "Oops! Looks like they are no lists or notes for your account."));
               }
+
+              if (data != {null}) {
+                data["NOTES"].forEach((key, element) {
+                  notes.add({"name": element["name"], "id": key});
+                });
+              } 
 
               return SingleChildScrollView(
                 child: Column(
@@ -121,7 +121,11 @@ class _HomeState extends State<Home> {
                             ),
                           ),
                           SizedBox(height: 20),
-                          ItemCard(title: "Important Notes")
+                          for (var i in notes)
+                            Column(children: [
+                              ItemCard(title: i["name"]),
+                              SizedBox(height: 10)
+                            ]),
                         ],
                       ),
                     ),

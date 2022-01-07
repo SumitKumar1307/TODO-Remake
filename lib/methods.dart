@@ -1,3 +1,5 @@
+import 'dart:core';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -123,9 +125,12 @@ class NoteObject extends AppObject {
     User? currentUser = FirebaseAuth.instance.currentUser;
     FirebaseFirestore cloud = FirebaseFirestore.instance;
     if (currentUser != null) {
-      await cloud.collection("data").doc(currentUser.uid).set({
-        "LIST": {toMap()["id"]: toMap()}
-      });
+      await cloud
+          .collection("data")
+          .doc(currentUser.uid)
+          .collection("NOTES")
+          .doc(id)
+          .set(toMap());
     }
 
     isSynced = true;
@@ -135,9 +140,12 @@ class NoteObject extends AppObject {
     User? currentUser = FirebaseAuth.instance.currentUser;
     FirebaseFirestore cloud = FirebaseFirestore.instance;
     if (currentUser != null) {
-      await cloud.collection("data").doc(currentUser.uid).update({
-        "NOTES": {id: toMap()}
-      });
+      await cloud
+          .collection("data")
+          .doc(currentUser.uid)
+          .collection("NOTES")
+          .doc(id)
+          .set(toMap());
     }
 
     isSynced = true;
@@ -155,7 +163,6 @@ class DataRetriever {
       await collection.get().then((value) {
         data = value.docs;
       });
-      if (data == null) return data;
 
       Map<String, dynamic> lists = {};
       for (var i in data) {
@@ -163,7 +170,35 @@ class DataRetriever {
       }
 
       return lists;
-      // return data["LIST"];
     }
+  }
+
+  Future<dynamic> retrieveNotes() async {
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    FirebaseFirestore cloud = FirebaseFirestore.instance;
+    if (currentUser != null) {
+      final CollectionReference collection =
+          cloud.collection("data").doc(currentUser.uid).collection("NOTES");
+      List<QueryDocumentSnapshot<Object?>> data = [];
+      await collection.get().then((value) {
+        data = value.docs;
+      });
+
+      Map<String, dynamic> notes = {};
+      for (var i in data) {
+        notes[i.id] = i.data();
+      }
+
+      return notes;
+    }
+  }
+
+  Future<Map<String, dynamic>> retrieveAllData() async {
+    dynamic listData = await retrieveLists();
+    dynamic noteData = await retrieveNotes();
+    return {
+      "LISTS": listData,
+      "NOTES": noteData,
+    };
   }
 }
