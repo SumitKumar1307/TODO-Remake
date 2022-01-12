@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
 import 'package:todo_remake/methods.dart';
-import 'package:uuid/uuid.dart';
+import 'package:todo_remake/ui/add_screen.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -22,14 +22,16 @@ class _HomeState extends State<Home> {
       greeting = "Good\nEvening!";
     }
 
-    var uuid = Uuid();
     DataRetriever dataRetriever = DataRetriever();
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          NoteObject noteObject = NoteObject("Important Formula", "e = mc^2");
-          noteObject.syncNote();
-          setState(() {});
+        onPressed: () => {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AddScreen(),
+            ),
+          )
         },
         child: Icon(Icons.add, color: Colors.black),
         backgroundColor: Color(0xffCFEDFF),
@@ -39,7 +41,6 @@ class _HomeState extends State<Home> {
           future: dataRetriever.retrieveAllData(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
-              print(snapshot.error);
               return Center(
                 child: Text("Something went wrong!"),
               );
@@ -52,13 +53,11 @@ class _HomeState extends State<Home> {
                 data["LISTS"].forEach((key, element) {
                   lists.add({"name": element["name"], "id": key});
                 });
-              }
 
-              if (data != {null}) {
                 data["NOTES"].forEach((key, element) {
                   notes.add({"name": element["name"], "id": key});
                 });
-              } 
+              }
 
               return SingleChildScrollView(
                 child: Column(

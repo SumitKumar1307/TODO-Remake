@@ -61,7 +61,7 @@ class AppObject {
 
 class ListObject extends AppObject {
   // [{"name": "Complete Homework", "item id": "0xFFGH123", "completed": true}]
-  late Map<String, Map<String, dynamic>> items;
+  late Map items;
 
   ListObject([String? title, Map<String, Map<String, dynamic>>? items]) {
     this.title = title ?? "";
